@@ -4,21 +4,21 @@
     <script async src="https://api.beta.glia.com/salemove_integration.js"></script>
 
     <script>
-      // This function waits for the 'sm' object to be available
-      // It also queues calls if the full 'sm' object from the external script hasn't loaded.
+      // 1. The "Shim" to prevent errors if the script is slow
       window.sm = window.sm || function() { (sm.q = sm.q || []).push(arguments) };
 
-      // Queue the getApi call to ensure it runs after the glia script has loaded
-      sm('getApi', {version: 'v1'}).then(function(glia) { // Modified line
-        glia.updateInformation({
-          reactiveTabVisuals: {
-            backColor: '#FF0000',// This changes the tab background to Red
-            frontColor: '#00FF00' // This changes the text color to Green
-          }
-        }).then(function() {
-          console.log('Reactive tab color updated successfully!');
-        }).catch(function(error) {
-          console.error('Error updating visuals:', error);
+      // 2. The proper way to call the API
+      // We use the 'sm' function to queue a callback that runs once the SDK is ready
+      sm(function(glia) {
+        sm.getApi({version: 'v1'}).then(function(gliaApi) {
+          gliaApi.updateInformation({
+            reactiveTabVisuals: {
+              backColor: '#FF0000',
+              frontColor: '#00FF00'
+            }
+          }).then(function() {
+            console.log('Reactive tab color updated successfully!');
+          });
         });
       });
     </script>
