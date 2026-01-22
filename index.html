@@ -5,21 +5,23 @@
 
     <script>
       // This function waits for the 'sm' object to be available
-        window.sm = window.sm || function() { (sm.q = sm.q || []).push(arguments) };
+      // It also queues calls if the full 'sm' object from the external script hasn't loaded.
+      window.sm = window.sm || function() { (sm.q = sm.q || []).push(arguments) };
 
-        sm.getApi({version: 'v1'}).then(function(glia) {
-          glia.updateInformation({
-            reactiveTabVisuals: {
-              backColor: '#FF0000',// This changes the tab background to Red
-              frontColor: '#00FF00' // This changes the text color to Green
-            }
-          }).then(function() {
-            console.log('Reactive tab color updated successfully!');
-          }).catch(function(error) {
-            console.error('Error updating visuals:', error);
-          });
+      // Queue the getApi call to ensure it runs after the glia script has loaded
+      sm('getApi', {version: 'v1'}).then(function(glia) { // Modified line
+        glia.updateInformation({
+          reactiveTabVisuals: {
+            backColor: '#FF0000',// This changes the tab background to Red
+            frontColor: '#00FF00' // This changes the text color to Green
+          }
+        }).then(function() {
+          console.log('Reactive tab color updated successfully!');
+        }).catch(function(error) {
+          console.error('Error updating visuals:', error);
         });
-      </script>
+      });
+    </script>
 
   <title>CE Testing Site</title>
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
