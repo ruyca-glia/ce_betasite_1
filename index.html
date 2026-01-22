@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script async src="https://api.beta.glia.com/salemove_integration.js">
-      // sm.getApi is the entry point for the Glia SDK
-      sm.getApi({version: 'v1'}).then(function(glia) {
-      
-      // We call updateInformation to pass the visuals
-      glia.updateInformation({
-        reactiveTabVisuals: {
-           // Replace with your desired hex code,
-          frontColor: '#FF0000'
-        }
-      }).then(function() {
-        console.log('Reactive tab color updated successfully!');
-      }).catch(function(error) {
-        console.error('Error updating visuals:', error);
-      });
+    <script async src="https://api.beta.glia.com/salemove_integration.js"></script>
 
-  });
-    </script>
+    <script>
+      // This function waits for the 'sm' object to be available
+        window.sm = window.sm || function() { (sm.q = sm.q || []).push(arguments) };
+
+        sm.getApi({version: 'v1'}).then(function(glia) {
+          glia.updateInformation({
+            reactiveTabVisuals: {
+              backColor: '#FF0000',// This changes the tab background to Red
+              frontColor: '#00FF00' // This changes the text color to Green
+            }
+          }).then(function() {
+            console.log('Reactive tab color updated successfully!');
+          }).catch(function(error) {
+            console.error('Error updating visuals:', error);
+          });
+        });
+      </script>
+
   <title>CE Testing Site</title>
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <style>
