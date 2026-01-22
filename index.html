@@ -4,21 +4,27 @@
     <script async src="https://api.beta.glia.com/salemove_integration.js"></script>
 
     <script>
-      // 1. The "Shim" to prevent errors if the script is slow
+      // 1. The Shim (Standard Glia setup)
       window.sm = window.sm || function() { (sm.q = sm.q || []).push(arguments) };
 
-      // 2. The proper way to call the API
-      // We use the 'sm' function to queue a callback that runs once the SDK is ready
-      sm(function(glia) {
-        sm.getApi({version: 'v1'}).then(function(gliaApi) {
-          gliaApi.updateInformation({
-            reactiveTabVisuals: {
-              backColor: '#FF0000',
-              frontColor: '#00FF00'
-            }
-          }).then(function() {
-            console.log('Reactive tab color updated successfully!');
-          });
+      // 2. Wait for the SDK to be ready
+      sm(function() {
+        sm.getApi({ version: 'v1' }).then(function(salemove) {
+            
+            // Apply the visuals to the config object
+            salemove.config.reactiveTabVisuals = {
+                frontColor: "#00FF00", // Green text
+                backColor: "#FF0000",  // Red background
+                text: "Chat with uuuus",  // Ensure text is defined
+                format: "text"
+            };
+
+            // CRITICAL: This flag must be true for the above to work
+            salemove.config.isCustomTheme = true; 
+            
+            console.log('Glia custom theme applied!');
+        }).catch(function(error) {
+            console.error('Glia SDK Error:', error);
         });
       });
     </script>
